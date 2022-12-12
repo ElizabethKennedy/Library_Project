@@ -1,194 +1,127 @@
-console.log("Hello World!\n==========\n");
+let library = [];
 
-// PROJECT Section
-console.log("PROJECT:\n==========\n");
-// Create superclass 'Book'
-class Book {
-    // Constructor establishes class properties.
-    constructor(id, title, author, isRead) {
-        this._id = id;
-        this._title = title;
-        this._author = author;
-        this._isRead = false;
+// Book Div and Template const
+const bookTemplate = document.querySelector('.book');
+const bookshelf = document.querySelector('#bookshelf');
+let idBook = library.length;
 
+function Book(title, author, read, want) {
+  this.id = idBook;
+  this.title = title;
+  this.author = author;
+  this.read = read;
+  this.want = want;
+
+  idBook += 1;
+}
+
+function ReloadLibrary() {
+  library = JSON.parse(localStorage.library);
+  console.log(library);
+
+  bookshelf.innerHTML = '';
+  bookshelf.appendChild(bookTemplate);
+
+  for (let i = 0; i < library.length; i += 1) {
+    // eslint-disable-next-line no-use-before-define
+    DisplayBook(library[i]);
+  }
+}
+
+function SaveBook(title, author, read, want) {
+  const book = new Book(title, author, read, want);
+  if (!Array.isArray(library)) {
+    library = [];
+  }
+  library.push(book);
+
+  localStorage.library = JSON.stringify(library);
+
+  ReloadLibrary();
+}
+
+// eslint-disable-next-line no-unused-vars
+function AddBook() {
+  // eslint-disable-next-line no-restricted-globals
+  event.preventDefault();
+
+  const formAddBook = document.forms.AddBook;
+  const bookData = new FormData(formAddBook);
+
+  const bookTitle = bookData.get('title');
+  const bookAuthor = bookData.get('author');
+  const bookRead = bookData.get('read');
+  const bookWant = bookData.get('want');
+
+  formAddBook.reset();
+
+  SaveBook(bookTitle, bookAuthor, bookRead, bookWant);
+}
+/* eslint-enable no-unused-vars */
+function updateBook(title, author) {
+    /*the user wants to change the status of the book from read to want or vice versa*/
+  /* change the value of read to null and want to want. or read to read and want to null,
+  based on user input*/
+  //Parse from local storage into a useable object called library
+  library = JSON.parse(localStorage.library);
+
+
+  for (let i = 0; i < library.length; i++) {
+    console.log(library[i].title);
+    //Slight issue with the if statement. Might want to check more specifically
+    //Right now it only looks at book titles.
+    if (library[i].title == title){
+      console.log("Found the book!");
+      //Found the book to update!
+      //Now we can change the want or read properties as desired
+      if (library[i].read){
+        library[i].read = false;
+      }else{
+        library[i].read = true;
+        console.log(library[i].read);
+      }
     }
-};
-//UI Class
-class UI {
-    static displayBooks() {
-        const StoredBooks =[
-            {
+  }
 
-                id:1,
-                title:'The Midnight Plan of the Repo Man',
-                author:'W. Bruce Cameron',
-                isRead:'Yes'
-            },
-            {
-                id:2,
-                title:'Repo Madness',
-                author:'W. Bruce Cameron',
-                isRead:'Yes'
-            },
-            {
-                id:3,
-                title:'Tales of H.P. Lovecraft',
-                author:'H.P. Lovecraft',
-                isRead:'Yes'
-            },
-            {
-                id:4,
-                title:'The Art of War',
-                author:'Sun Tzu',
-                isRead:'Yes'
-            },
-            (
-                id:5,
-                title:'Fight Club',
-                author:'Chuck Palahniuk',
-                isRead:'Yes'
-            ),
-            {
-                id:6,
-                title:'The 48 Laws of Power',
-                author:'Robert Greene',
-                isRead:'Yes'
-
-            },
-            {
-                id:7,
-                title:'How To Remodel a Man: Tips and Techniques on Accomplishing Something You Know Is Impossible But Want to Try Anyway',
-                author:'W. Bruce Cameron',
-                isRead:'Yes'
-            }
-            
-        ];
-        const books = StoredBooks;
-
-        books.forEach((book) => UI.addBookToList());
-    }
-    static addBookToList(book) {
-        const list = document.querySelector('#book-list');
-
-        const row = document.createElement('tr');
-
-        row.innerHTML = `
-          <td>${book.id}</td>
-          <td>${book.title}</td>
-          <td>${book.author}</td>
-          <td>${book.isRead}</td>
-          <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>
-        
-        
-        
-        `;
-        list.appendChild(row);
-    }
-        static deleteBook(el) {
-            if(el.classList.contains('delete')) {
-                el.parentElement.parentElement.remove();
-            }
-
-        }
-        static showAlert(message, className) {
-            const div = document.createElement('div');
-            div.className = `alert` alert-${className};
-            div.appendChild(document.createTextNode(message));
-            const container = document.querySelector('.container');
-            const form = document.querySelector('book-form');
-            container.insertBefore(div, form);
-
-            //Vanish in 3 seconds 
-            setTimeout(() => document.querySelection('.alert').remove(),
-            3000);        
-
-        }
-
-
-        static clearFields() {
-            document.querySelector('#id').value = '';
-            document.querySelector('#title').value = '';
-            document.querySelector('#author').value = '';
-            document.querySelector('#isRead').value = '';
-
-        }
-   }
-
-//Event: Display Books
-document.addEventListener('DOMContentLoaded', UI.displayBooks);
-
-
-// Store Class: handles storage
-class Store {
-  static getBooks() {
-    let books;
-    if (localStorage.getItem('books') === null {
-        books = [];
-    } else {
-        books = JSON.parse(localStorage.getItem('books'));
-    }
-    return books;
-    }
-
-    }
-    static addBook(book) {
-        const books = Store.getBooks();
-        books.push(book);
-        localStorage.setItem('books', JSON.stringify(books));
-
-    }
-    
-    static removeBook(id) {
-        const books =Store.getBooks();
-        books.forEach((book, index) => {
-            if(book.id === id) {
-                books.splice(index, 1);
-            }
-        });
-        localStorage.setItem('books',JSON.stringify(books));
-
-    }
+  //Parse back into a JSON format to update the localStorage object
+  localStorage.library = JSON.stringify(library);
 }
 
 
-//Event: Add a book
-document.querySelector('#book-form').addEventListener('submit', (e) => {
+function DeleteBook(id) {
+  library = library.filter((book) => book.id !== id);
 
-    //Prevent actual submit
-     e.preventDefault();
+  localStorage.library = JSON.stringify(library);
 
-    //Get form values
-    const id = document.querySelector('#id').value;
-    const title = document.querySelector('#title').value;
-    const author = document.querySelector('#author').value;
-    const isRead = document.querySelector('#isRead').value;
-//Validate 
-  if(id === '' || title === '' || author === '' ) {
-    UI.showAlert('Please fill in all fields', 'danger');
-} else {
-
-    //Instantiate book
-const book = new Book(id, title, author, isRead);
-
-console.log(book)
-
-//Add book to UI
-
-UI.addBookToList(book);
-
-//Show success message
-UI.showAlert('Book Added', 'success');
-
-//Method to clear fields
-UI.clearFields();
+  ReloadLibrary();
 }
 
-});
+function DisplayBook(book) {
+  const clon = bookTemplate.content.cloneNode(true);
+  clon.querySelectorAll('p')[0].innerHTML = 'BOOK NAME: '+book.title;
+  clon.querySelectorAll('p')[1].innerHTML = 'AUTHOR NAME: '+book.author;
+  clon.querySelectorAll('p')[2].innerHTML = 'READ: '+book.read;
+  clon.querySelectorAll('p')[3].innerHTML = 'WANT: '+book.want;
 
-//Event: Remove a book
-document.querySelector('#book-list').addEventListener('click', (e) =1> {
-   UI.deleteBook(e.target);
- });
 
- //Show success message
-UI.showAlert('Book Added', 'success');
+  clon.querySelector('button')
+  .addEventListener('click', () => {
+     DeleteBook(book.id);
+  });
+
+  clon.querySelector('#toggleButton')
+  .addEventListener('click', () => {
+    console.log("Secondary button clicked!");
+    //This needs the actual values depending on which button got clicked
+    //Not so helpful hint lol: clojures would be your friend here
+    updateBook("test", "author", "read", "want");
+    //Do the actual toggling
+
+
+  });
+
+  bookshelf.appendChild(clon);
+}
+
+// Load the Library on opening the page
+ReloadLibrary();
