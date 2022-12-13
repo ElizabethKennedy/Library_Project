@@ -5,12 +5,12 @@ const bookTemplate = document.querySelector('.book');
 const bookshelf = document.querySelector('#bookshelf');
 let idBook = library.length;
 
-function Book(title, author, read, want) {
+function Book(title, author, read) {
   this.id = idBook;
   this.title = title;
   this.author = author;
   this.read = read;
-  this.want = want;
+
 
   idBook += 1;
 }
@@ -28,8 +28,8 @@ function ReloadLibrary() {
   }
 }
 
-function SaveBook(title, author, read, want) {
-  const book = new Book(title, author, read, want);
+function SaveBook(title, author, read) {
+  const book = new Book(title, author, read);
   if (!Array.isArray(library)) {
     library = [];
   }
@@ -51,14 +51,14 @@ function AddBook() {
   const bookTitle = bookData.get('title');
   const bookAuthor = bookData.get('author');
   const bookRead = bookData.get('read');
-  const bookWant = bookData.get('want');
+
 
   formAddBook.reset();
 
-  SaveBook(bookTitle, bookAuthor, bookRead, bookWant);
+  SaveBook(bookTitle, bookAuthor, bookRead);
 }
 /* eslint-enable no-unused-vars */
-function updateBook(title, author) {
+function updateBook(title, author, read) {
     /*the user wants to change the status of the book from read to want or vice versa*/
   /* change the value of read to null and want to want. or read to read and want to null,
   based on user input*/
@@ -70,7 +70,7 @@ function updateBook(title, author) {
     console.log(library[i].title);
     //Slight issue with the if statement. Might want to check more specifically
     //Right now it only looks at book titles.
-    if (library[i].title == title){
+    if (library[i].title === title){
       console.log("Found the book!");
       //Found the book to update!
       //Now we can change the want or read properties as desired
@@ -101,7 +101,6 @@ function DisplayBook(book) {
   clon.querySelectorAll('p')[0].innerHTML = 'BOOK NAME: '+book.title;
   clon.querySelectorAll('p')[1].innerHTML = 'AUTHOR NAME: '+book.author;
   clon.querySelectorAll('p')[2].innerHTML = 'READ: '+book.read;
-  clon.querySelectorAll('p')[3].innerHTML = 'WANT: '+book.want;
 
 
   clon.querySelector('button')
@@ -109,19 +108,11 @@ function DisplayBook(book) {
      DeleteBook(book.id);
   });
 
-  clon.querySelector('#toggleButton')
-  .addEventListener('click', () => {
-    console.log("Secondary button clicked!");
-    //This needs the actual values depending on which button got clicked
-    //Not so helpful hint lol: clojures would be your friend here
-    updateBook("test", "author", "read", "want");
-    //Do the actual toggling
 
+  }
 
-  });
+  bookshelf.appendChild(bookTemplate.content.cloneNode(true));
 
-  bookshelf.appendChild(clon);
-}
 
 // Load the Library on opening the page
 ReloadLibrary();

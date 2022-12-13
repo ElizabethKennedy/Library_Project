@@ -5,6 +5,7 @@
   <meta name="viewport" content="width-device-width, initial-scale=1">
   <title>My Library</title>
   <link rel="stylesheet" href="./style.css"/>
+
 <!-- Latest compiled and minified CSS-->
 <link rel="stylesheet" href="https://maxcdnbootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <!-- jQuery library-->
@@ -13,6 +14,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <!-- Latest compiled javascript-->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 <style type="text/css"> body{background-color:lightpink; text-align: center; } </style>
 </head>
 <div>
@@ -22,12 +25,12 @@
       <template class="book">
         <p>Book Title</p>
         <p>Book Author</p>
-        <p><input type="radio" name="read" value="read" id="read">
-        <label for="read">I have read this book</label></p>
-        <p><input type="radio" name="want" value="want" id="want">
-        <label for="want">I want to read this book</label></p>
+
+
+
         <button class="btn btn-primary">Remove</button>
-        <button class="btn btn-secondary" id="toggleButton">Toggle Read</button>
+
+
         <hr>
       </template>
     </div>
@@ -45,27 +48,21 @@
     <input class="form-control" type="text" name="author"
     placeholder="Author of the book..." required>
     <br>
-    <input type="radio" name="read" value="read" id="read" />
-    <label for="read">I have read this book</label>
+
+    <label>Read It?</label>
+
+
     <br>
-    <input type="radio" name="want" value="want" id="want" />
-    <label for="want">I want to read this book</label>
+    <input id="yes" type="checkbox" name="read" value="yes"
+    checked="checked">
+    <label for="yes">Yes</label>
+    <input id="no" type="checkbox" name="read" value="no">
+    <label for="no">No</label>
+    <input type="checkbox" name="read" value="favorite">
+    <label for="favorite">Favorite</label>
     <br>
+
     <button class="btn btn-danger" type="submit">Add book</button>
-
-    <h2>Have you read this book?</h2>
-
-
-
-
-
-    <div id="read-it">Click to toggle read status</div>
-
-    <button onclick="btntog()">Read It!</button>
-
-
-    <script src="test.js"></script>
-
 
 
   </form>
